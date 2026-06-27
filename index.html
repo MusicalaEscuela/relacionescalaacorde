@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MusiMapa Armónico | Relación Escala–Acorde</title>
+  <meta name="description" content="Aplicativo interactivo para explicar y practicar la relación escala-acorde para cualquier instrumento." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <nav class="topbar" aria-label="Navegación principal">
+        <a class="brand" href="#inicio" data-tab-link="inicio" aria-label="MusiMapa Armónico inicio">
+          <img class="brand-mark" src="assets/logo.png" alt="Musicala" height="40" />
+          <span>
+            <strong>MusiMapa Armónico</strong>
+            <small>Relación Escala–Acorde</small>
+          </span>
+        </a>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="soundToggle" type="button" aria-pressed="true" aria-label="Activar o silenciar sonido" title="Sonido">
+            <span aria-hidden="true" data-sound-icon>🔊</span>
+          </button>
+          <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">
+            <span aria-hidden="true" data-theme-icon>☀️</span>
+          </button>
+          <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menú">☰</button>
+        </div>
+        <div class="nav-links" id="navLinks" role="tablist" aria-label="Secciones">
+          <button data-tab-link="explorador" role="tab" aria-selected="true" class="active">Explorador</button>
+          <button data-tab-link="comparador" role="tab" aria-selected="false">Comparador</button>
+          <button data-tab-link="escala" role="tab" aria-selected="false">Escala → Acordes</button>
+          <button data-tab-link="progresiones" role="tab" aria-selected="false">Progresiones</button>
+          <button data-tab-link="practica" role="tab" aria-selected="false">Práctica</button>
+          <button data-tab-link="biblioteca" role="tab" aria-selected="false">Biblioteca</button>
+        </div>
+      </nav>
+
+      <section id="inicio" class="hero-content">
+        <div>
+          <p class="eyebrow">Para piano, guitarra, voz, vientos, cuerdas y cualquier criatura musical con paciencia.</p>
+          <h1>Entiende qué escala funciona sobre qué acorde, por qué funciona y cómo practicarlo.</h1>
+          <p class="hero-copy">El acorde muestra los puntos de apoyo. La escala muestra el territorio completo. Esta app une ambos mapas con notas, grados, colores, ejercicios y progresiones.</p>
+          <div class="hero-actions">
+            <button class="primary" data-tab-link="explorador">Explorar una relación</button>
+            <button class="secondary" data-tab-link="practica">Practicar ahora</button>
+          </div>
+        </div>
+        <aside class="hero-card" aria-label="Resumen visual">
+          <div class="mini-score">
+            <span>Cmaj7</span>
+            <span>C Lidio</span>
+          </div>
+          <div class="note-orbit" aria-hidden="true">
+            <span>C</span><span>D</span><span>E</span><span>F#</span><span>G</span><span>A</span><span>B</span>
+          </div>
+          <div class="legend compact">
+            <span><i class="dot chord"></i> Acorde</span>
+            <span><i class="dot tension"></i> Color</span>
+            <span><i class="dot caution"></i> Cuidado</span>
+          </div>
+          <button class="chip-button hero-demo" type="button" id="heroDemoBtn">▶ Escuchar Cmaj7 + C Lidio</button>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section id="explorador" class="tab-panel active" tabindex="-1">
+        <div class="section-heading">
+          <p class="eyebrow">Laboratorio principal</p>
+          <h2>Explorador escala–acorde</h2>
+          <p>Selecciona un acorde y una escala. La app clasifica cada nota y explica la relación sin ponerse con cara de tratado alemán de armonía.</p>
+        </div>
+
+        <div class="grid two">
+          <form class="control-card" id="explorerControls">
+            <h3>Configuración</h3>
+            <label>Tónica del acorde
+              <select id="chordRoot"></select>
+            </label>
+            <label>Tipo de acorde
+              <select id="chordType"></select>
+            </label>
+            <label>Tónica de la escala
+              <select id="scaleRoot"></select>
+            </label>
+            <label>Escala / modo
+              <select id="scaleType"></select>
+            </label>
+            <div class="button-row">
+              <button class="primary" type="button" id="sameRootBtn">Misma tónica</button>
+              <button class="secondary" type="button" id="randomExploreBtn">Azar útil</button>
+            </div>
+          </form>
+
+          <article class="result-card" id="explorerResult" aria-live="polite"></article>
+        </div>
+      </section>
+
+      <section id="comparador" class="tab-panel" tabindex="-1">
+        <div class="section-heading">
+          <p class="eyebrow">No hay una escala única, qué tragedia para los atajos mentales.</p>
+          <h2>Comparador de colores sobre un mismo acorde</h2>
+          <p>Elige un acorde y compara escalas compatibles o interesantes. Verás estabilidad, tensiones y carácter sonoro.</p>
+        </div>
+        <div class="control-strip">
+          <label>Tónica
+            <select id="compareRoot"></select>
+          </label>
+          <label>Acorde
+            <select id="compareChordType"></select>
+          </label>
+          <button class="primary" id="buildCompareBtn" type="button">Comparar</button>
+        </div>
+        <div class="compare-grid" id="compareGrid"></div>
+      </section>
+
+      <section id="escala" class="tab-panel" tabindex="-1">
+        <div class="section-heading">
+          <p class="eyebrow">De territorio a arquitectura</p>
+          <h2>Escala → acordes diatónicos</h2>
+          <p>Escoge una escala y mira qué acordes nacen al apilar terceras dentro de ella. Sí, las escalas también tienen familia, como todos, qué peligro.</p>
+        </div>
+        <div class="control-strip">
+          <label>Tónica
+            <select id="diatonicRoot"></select>
+          </label>
+          <label>Escala
+            <select id="diatonicScale"></select>
+          </label>
+          <button class="primary" id="buildDiatonicBtn" type="button">Construir acordes</button>
+        </div>
+        <div id="diatonicResult" class="table-card"></div>
+      </section>
+
+      <section id="progresiones" class="tab-panel" tabindex="-1">
+        <div class="section-heading">
+          <p class="eyebrow">Aplicación real</p>
+          <h2>Progresiones y escalas sugeridas</h2>
+          <p>Practica la relación escala–acorde dentro de movimientos armónicos comunes. Porque tocar escalas sin contexto es como memorizar palabras para jamás hablar.</p>
+        </div>
+        <div class="control-strip">
+          <label>Tonalidad
+            <select id="progressionRoot"></select>
+          </label>
+          <label>Progresión
+            <select id="progressionType"></select>
+          </label>
+          <button class="primary" id="buildProgressionBtn" type="button">Ver ruta</button>
+        </div>
+        <div id="progressionResult" class="progression-card"></div>
+      </section>
+
+      <section id="practica" class="tab-panel" tabindex="-1">
+        <div class="section-heading">
+          <p class="eyebrow">Entrenamiento</p>
+          <h2>Modo práctica</h2>
+          <p>Ejercicios cortos con explicación. La meta no es adivinar: es entender el mapa para usarlo en cualquier instrumento.</p>
+        </div>
+        <div class="practice-layout">
+          <article class="quiz-card" id="quizCard" aria-live="polite"></article>
+          <aside class="stats-card">
+            <h3>Progreso</h3>
+            <div class="stat"><strong id="scoreValue">0</strong><span>Puntos</span></div>
+            <div class="stat"><strong id="streakValue">0</strong><span>Racha</span></div>
+            <button class="secondary full" id="resetStatsBtn" type="button">Reiniciar progreso</button>
+            <div class="tip-box">
+              <strong>Ruta sugerida</strong>
+              <p>Primero identifica notas del acorde. Luego agrega tensiones. Después practica resoluciones. El virtuosismo sin mapa es gimnasia con sonido, y bueno… ajá.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="biblioteca" class="tab-panel" tabindex="-1">
+        <div class="section-heading">
+          <p class="eyebrow">Referencia rápida</p>
+          <h2>Biblioteca de escalas y acordes</h2>
+          <p>Busca fórmulas, notas relativas, usos y sensaciones. Funciona como apoyo de clase o estudio autónomo.</p>
+        </div>
+        <div class="library-tools">
+          <input id="librarySearch" type="search" placeholder="Buscar: dórico, dominante, maj7, blues..." />
+          <button class="secondary" id="clearSearchBtn" type="button">Limpiar</button>
+        </div>
+        <div class="library-grid" id="libraryGrid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p><strong>MusiMapa Armónico</strong> · Hecho para Musicala · Teoría aplicable a cualquier instrumento.</p>
+      <p class="small">Funciona abriendo <code>index.html</code> directamente: sin build, sin servidores, sin invocar a los demonios de npm. El audio usa la Web Audio API del navegador.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
